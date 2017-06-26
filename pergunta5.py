@@ -2,13 +2,26 @@ from pyspark import SparkContext
 
 sc = SparkContext()
 
-#tops = sc.textFile("/home/merda/Downloads/project3-dataset.csv").map(lambda line: (str(line.split(",")[0]),long(line.split(",")[6]))).reduceByKey(lambda a , b : a+b)
-avg = sc.textFile("/home/merda/Downloads/project3-dataset.csv").map(lambda line: (str(line.split(",")[0]), long(line.split(",")[6])).reduceByKey(lambda a , b : a+b)
-#top = avg.map(lambda line : (line[0],sum(line[1].values())))
-print "top guy sender "+str(sorted(avg.collect(),key = lambda val : val[1])[-1])
+file = sc.textFile("/home/cc1/project3-dataset.csv")
+ipSender = file.map(lambda line: (str(line.split(",")[0]), long(line.split(",")[6]))).reduceByKey(lambda a , b : a+b)
+ipRecv = file.map(lambda line: (str(line.split(",")[1]), long(line.split(",")[6]))).reduceByKey(lambda a , b : a+b)
 
-avg1 = sc.textFile("/home/merda/Downloads/project3-dataset.csv").map(lambda line: (str(line.split(",")[1]), long(line.split(",")[6])).reduceByKey(lambda a , b : a+b)
-print "top guy recv "+str(sorted(avg1.collect(),key = lambda val : val[1])[-1])
+
+top_sender = ipSender.top(1, key = lambda x: x[1])
+#top_sender = str(sorted(top.collect(),key = lambda val : val[1])[-1])
+top_recv = ipRecv.top(1,key = lambda val : val[1])
+#ave_sender = str(sorted(avgs.collect(),key = lambda val : val[1])[-1])
+
+def toCSVLine(data):
+  return ','.join(str(d) for d in data)
+
+out1 = top_sender.map(toCSVLine)
+out1.saveAsTextFile('/home/cc1/OutputPergunta5TopSender')
+
+out2 = top_recv.map(toCSVLine)
+out2.saveAsTextFile('/home/cc1/OutputPergunta5TopRecv')
+
+
 
 
 

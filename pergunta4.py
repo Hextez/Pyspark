@@ -7,12 +7,15 @@ from collections import Counter
 
 sc = SparkContext()
 
-#tops = sc.textFile("/home/merda/Downloads/project3-dataset.csv").map(lambda line: (str(line.split(",")[0]),long(line.split(",")[6]))).reduceByKey(lambda a , b : a+b)
-avg = sc.textFile("/home/merda/Downloads/project3-dataset.csv").map(lambda line: (str(line.split(",")[0]),{str(line.split(",")[0]) : 1 }).reduceByKey(lambda a , b : a)
+avg = sc.textFile("/home/cc1/project3-dataset.csv").map(lambda line: (str(line.split(",")[0]),{str(line.split(",")[0]) : 1 })).reduceByKey(lambda a , b : a)
 
-top = avg.map(lambda line : (line[0],len(line[1].keys())))
+top = avg.map(lambda line : (line[0],len(line[1].keys()))).top(1, key = lambda x : x[1])
 
-print "top guy "+str(sorted(top.collect(),key = lambda val : val[1])[-1])
+def toCSVLine(data):
+  return ','.join(str(d) for d in data)
+
+out1 = top.map(toCSVLine)
+out1.saveAsTextFile('/home/cc1/OutputPergunta4')
 
 
 
