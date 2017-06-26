@@ -14,12 +14,11 @@ top_sender = top.top(1, key = lambda x: x[1])
 ave_sender = avgs.top(1,key = lambda val : val[1])
 #ave_sender = str(sorted(avgs.collect(),key = lambda val : val[1])[-1])
 
-def toCSVLine(data):
-  return ','.join(str(d) for d in data)
+f = open("/home/cc1/OutputPergunta1.txt", "w")
+for i in top_sender:
+	f.write("Quem enviou mais, " + str(i)+"\n")
+for i in ave_sender:
+	f.write("Media por dias, "+ str(i)+"\n")
+f.close()
 
-out1 = top_sender.map(toCSVLine)
-out1.saveAsTextFile('/home/cc1/OutputPergunta1TopSender')
-
-out2 = ave_sender.map(toCSVLine)
-out2.saveAsTextFile('/home/cc1/OutputPergunta1TopSender')
 
