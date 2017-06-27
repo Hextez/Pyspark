@@ -14,7 +14,6 @@ source = infos.map(lambda line : (str(line.split(",")[0]), 1 )).reduceByKey(lamb
 dest = infos.map(lambda line : (str(line.split(",")[1]),1 )).reduceByKey(lambda a , b : a + b)
 
 totals = source.union(dest)
-print str(totals.collect())
 total= totals.reduceByKey(lambda a , b: a + b)
 
 gateways = total.top(30,key=lambda x : x[1])
