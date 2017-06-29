@@ -1,0 +1,2 @@
+Quem enviou mais, ('128.3.70.97', 10586254399L)
+A sua media por dias, ('128.3.70.97', 1512322057L)
